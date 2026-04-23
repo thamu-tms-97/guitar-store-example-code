@@ -27,7 +27,7 @@ export class ProductItem {
   constructor(
     private cartService: CartService,
     private productsService: ProductsService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
   ) {}
 
   ngOnInit() {
@@ -44,13 +44,13 @@ export class ProductItem {
   private generateHash(nameId: string): number {
     // Generates a repeteable-random non-negative integer value based on
     // the string s, which is the concatenation of product name and id.
-
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
-
-    let hash: number = 2;
-    return hash;
+    let hash: number = 0;
+    for (let i = 0; i < nameId.length; i++) {
+      const char = nameId.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash |= 0;
+    }
+    return Math.abs(hash);
   }
 
   // Calculates image number for this specific product.
@@ -113,7 +113,7 @@ export class ProductItem {
     const msg = `Unable to add ${this.selected} ${this.prod!.value.name} to cart. ${
       this.prod!.value.currentQuantity
     } are in stock, and ${this.cartService.quantity(
-      this.prod!.value.id
+      this.prod!.value.id,
     )} are already in your cart. You can add up to ${canAdd} more.`;
     this.productsService.message = { show: true, type: ProductAlertType.Danger, text: msg };
     this.logger.error(msg);
