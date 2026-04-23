@@ -18,7 +18,7 @@ export class ShoppingCart {
     private productsService: ProductsService,
     private cartService: CartService,
     private router: Router,
-    private logger: NGXLogger
+    private logger: NGXLogger,
   ) {}
 
   products: Map<number, Product> = new Map<number, Product>();
@@ -41,49 +41,44 @@ export class ShoppingCart {
   }
 
   quantity(productId: number): number {
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
-    let res = 222;
-    return res;
+    return this.cartService.quantity(productId);
   }
 
   productSubtotal(productId: number): number {
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
-    let res = 333;
-    return res;
+    const price = this.products.get(productId)?.price ?? 0;
+    return price * this.cartService.quantity(productId);
   }
 
   subtotal(): number {
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
-    let total = 123.45;
+    let total = 0;
+    for (const [id, product] of this.products) {
+      total += product.price * this.cartService.quantity(id);
+    }
     return total;
   }
 
   tax(): number {
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
-    return 543.21;
+    // California sales tax 9.25%
+    return this.subtotal() * 0.0925;
   }
 
   total(): number {
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
-    let res = 999.99;
-    return res;
+    return this.subtotal() + this.tax();
   }
 
   processOrder() {}
 
   orderPlaced() {
-    /*
-     * STUDENTS MUST WRITE CODE FOR THIS FUNCTION
-     */
+    // Reduce store inventory by quantities in cart
+    for (const item of this.cartService.cart) {
+      const product = this.productsService.products.get(item.productId);
+      if (product) {
+        product.currentQuantity -= item.quantity;
+      }
+    }
+    // Clear the cart
+    this.cartService.cart.splice(0);
+    // Navigate to order placed page
+    this.router.navigate(['/order-placed']);
   }
 }
