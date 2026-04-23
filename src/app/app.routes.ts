@@ -2,7 +2,10 @@ import { Routes } from '@angular/router';
 
 import { Guitar } from './guitar/guitar';
 import { Home } from './home/home';
+import { Picks } from './picks/picks';
 import { ShoppingCart } from './shopping-cart/shopping-cart';
+import { Straps } from './straps/straps';
+import { Strings } from './strings/strings';
 
 export const routes: Routes = [
   {
@@ -14,7 +17,19 @@ export const routes: Routes = [
     component: Guitar,
   },
   {
+    path: 'pick',
+    component: Picks,
+  },
+  {
     path: 'shopping-cart',
     component: ShoppingCart,
+  },
+  {
+    path: 'strap',
+    component: Straps,
+  },
+  {
+    path: 'strings',
+    component: Strings,
   },
 ];
